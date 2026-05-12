@@ -6,10 +6,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
 
     private final VBox container;
@@ -17,7 +13,6 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
     private final Label hoursLabel;
     private final Label percentLabel;
     private final ProgressBar progressBar;
-    private final ArrayList<T> allItems;
     private final ColorProvider colorProvider;
 
     @FunctionalInterface
@@ -25,12 +20,11 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
         String colorFor(double progress);
     }
 
-    public BudgetProgressCell(List<T> allItems) {
-        this(allItems, BudgetProgressCell::defaultColor);
+    public BudgetProgressCell() {
+        this(BudgetProgressCell::defaultColor);
     }
 
-    public BudgetProgressCell(List<T> allItems, ColorProvider colorProvider) {
-        this.allItems = new ArrayList<>(allItems);
+    public BudgetProgressCell(ColorProvider colorProvider) {
         this.colorProvider = colorProvider;
 
         nameLabel = new Label();
@@ -53,7 +47,6 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
     @Override
     protected void updateItem(T item, boolean empty) {
         super.updateItem(item, empty);
-        sortItems();
         if (empty || item == null || item.budgetMinutes().isEmpty()) {
             setGraphic(null);
         } else {
@@ -85,7 +78,4 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
         return String.format("#%02x%02x00", r, g);
     }
 
-    private void sortItems() {
-        allItems.sort(Comparator.comparingLong(BudgetCellItem::spentMinutes).reversed());
-    }
 }
