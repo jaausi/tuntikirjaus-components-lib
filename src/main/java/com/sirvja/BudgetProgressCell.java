@@ -6,6 +6,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
@@ -15,7 +17,7 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
     private final Label hoursLabel;
     private final Label percentLabel;
     private final ProgressBar progressBar;
-    private final List<T> allItems;
+    private final ArrayList<T> allItems;
     private final ColorProvider colorProvider;
 
     @FunctionalInterface
@@ -28,7 +30,7 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
     }
 
     public BudgetProgressCell(List<T> allItems, ColorProvider colorProvider) {
-        this.allItems = allItems;
+        this.allItems = new ArrayList<>(allItems);
         this.colorProvider = colorProvider;
 
         nameLabel = new Label();
@@ -51,21 +53,17 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
     @Override
     protected void updateItem(T item, boolean empty) {
         super.updateItem(item, empty);
-        if (empty || item == null) {
+        sortItems();
+        if (empty || item == null || item.budgetMinutes().isEmpty()) {
             setGraphic(null);
         } else {
-            long maxSpent = allItems.stream()
-                    .mapToLong(BudgetCellItem::spentMinutes)
-                    .max()
-                    .orElse(1L);
-
-            double progress = maxSpent > 0 ? (double) item.spentMinutes() / maxSpent : 0;
+            double progress = (double) item.spentMinutes() / item.budgetMinutes().getAsLong();
 
             nameLabel.setText(item.name());
             hoursLabel.setText(item.hoursLabel());
-            progressBar.setProgress(Math.min(progress, 1.0));
+            progressBar.setProgress(Math.min(progress, 1.0)); // Cap progressbar to 100%
 
-            int percentage = (int) Math.round(progress * 100);
+            int percentage = (int) Math.round(progress * 100); // Round to nearest whole number
             percentLabel.setText(percentage + " %");
             percentLabel.setStyle("-fx-font-size: 10; -fx-font-weight: bold; -fx-text-fill: #FCFCFC;");
             progressBar.setStyle("-fx-accent: " + colorProvider.colorFor(progress) + "; -fx-control-inner-background: #2B2B2B;");
@@ -85,5 +83,9 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
             g = (int) ((1.0 - clamped) * 2 * 200);
         }
         return String.format("#%02x%02x00", r, g);
+    }
+
+    private void sortItems() {
+        allItems.sort(Comparator.comparingLong(BudgetCellItem::spentMinutes).reversed());
     }
 }
