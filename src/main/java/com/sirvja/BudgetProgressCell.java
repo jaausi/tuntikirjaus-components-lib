@@ -6,7 +6,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
@@ -30,7 +29,6 @@ public class BudgetProgressCell<T extends BudgetCellItem> extends ListCell<T> {
 
     public BudgetProgressCell(List<T> allItems, ColorProvider colorProvider) {
         this.allItems = allItems;
-        this.allItems.sort(Comparator.comparingLong(BudgetCellItem::spentMinutes).reversed());
         this.colorProvider = colorProvider;
 
         nameLabel = new Label();
