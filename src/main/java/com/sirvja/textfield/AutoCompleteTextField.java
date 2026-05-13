@@ -1,4 +1,4 @@
-package com.sirvja;
+package com.sirvja.textfield;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

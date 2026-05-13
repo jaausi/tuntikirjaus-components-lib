@@ -3,5 +3,6 @@ module tuntikirjaus.components.lib {
     requires javafx.graphics;
     requires javafx.controls;
 
-    exports com.sirvja;
+    exports com.sirvja.listcell;
+    exports com.sirvja.textfield;
 }

@@ -89,21 +89,34 @@ GitHub Packages requires authentication even for public packages. Add the follow
 ### 3. Example usage
 
 ```java
-import com.sirvja.AutoCompleteTextField;
+import com.sirvja.textfield.AutoCompleteTextField;
+
 import java.util.TreeSet;
 
 // Create with a pre-populated entry set
 var entries = new TreeSet<>(List.of("Alpha", "Beta", "Gamma", "Delta"));
-var field = new AutoCompleteTextField<>(entries);
+        var field = new AutoCompleteTextField<>(entries);
 
 // Listen for the item the user picks from the popup
-field.getLastSelectedObject().addListener((obs, oldVal, newVal) -> {
-    System.out.println("Selected: " + newVal);
+field.
+
+        getLastSelectedObject().
+
+        addListener((obs, oldVal, newVal) ->{
+        System.out.
+
+        println("Selected: "+newVal);
 });
 
 // Filter-only mode: hide popup, bind filtered results to a ListView instead
-field.setPopupHidden(true);
-listView.itemsProperty().bind(new SimpleListProperty<>(field.getFilteredEntries()));
+        field.
+
+        setPopupHidden(true);
+listView.
+
+        itemsProperty().
+
+        bind(new SimpleListProperty<>(field.getFilteredEntries()));
 ```
 
 ---

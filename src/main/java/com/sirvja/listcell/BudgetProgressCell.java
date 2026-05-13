@@ -1,4 +1,4 @@
-package com.sirvja;
+package com.sirvja.listcell;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
